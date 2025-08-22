@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sitio: Yaax Tuch</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; background: #f5f5f5; }
+    h1, h2 { text-align: center; }
+    .audio-section { background: #fff; margin: 2em auto; padding: 1em; border-radius: 10px; box-shadow: 0 0 10px #ccc; max-width: 800px; }
+    audio { width: 100%; margin-top: 0.5em; }
+    .back-link { display: block; margin-bottom: 1em; text-align: center; }
+    .category { margin-bottom: 2em; text-align: center; }
+    .species-img { width: 60%; max-width: 300px; height: auto; margin-bottom: 0.5em; border-radius: 8px; box-shadow: 0 0 5px #aaa; }
+    .img-caption { font-size: 0.8em; color: #555; margin-top: -0.3em; margin-bottom: 0.8em; }
+  </style>
+</head>
+<body>
+  <!-- <a class="back-link" href="../index.html">⬅ Volver a la lista de sitios</a>--> 
+  <h1>Sitio: Ya'ax-Tuch, Bacalar, Q.Roo, México</h1>
+  <h2>Sonidos Naturales y Biodiversidad</h2>
+  
+
+
+  <div class="audio-section">
+    <h2>Paisajes Sonoros</h2>
+    <div class="category">
+      <p><strong>Amanecer - 5:30-6:30 AM (01 agosto 2024)</strong></p>
+      <audio controls>
+        <source src="../Yaaxtuch/amanecer_R451_20240801_0530-0630.mp3" type="audio/mpeg">
+        Tu navegador no soporta la reproducción de audio.
+      </audio>
+    </div>
+    <div class="category">
+      <p><strong>Atardecer - 6:00-7:00 PM (07 agosto 2024)</strong></p>
+      <audio controls>
+        <source src="../Yaaxtuch/atardecer_R451_20240807_1800-1900.mp3" type="audio/mpeg">
+      </audio>
+    </div>
+  </div>
+
+  <div class="audio-section">
+    <h2>Especies Detectadas</h2>
+    <!--
+    <div class="category">
+      <img src="https://inaturalist-open-data.s3.amazonaws.com/photos/7038222/medium.jpg" alt="Ateles geoffroyi" class="species-img">
+      <p class="img-caption">Foto: © Salvador Poot Villanueva / CC-BY-NC 4.0</p>
+      <p><strong>Ateles geoffroyi (Mono araña)</strong></p>
+      <audio controls>
+        <source src="../audios/FCP_naybi/ateles_llamada.mp3" type="audio/mpeg">
+      </audio>
+    </div>
+    --> 
+    <div class="category">
+      <img src="https://inaturalist-open-data.s3.amazonaws.com/photos/172241375/large.jpg" alt="Saltapared Ventre Blanco" class="species-img">
+      <p class="img-caption">Foto: Josh Vandermeulen / iNaturalista</p>
+      <p><strong>White-Billed Wren, <i>Uropsila leucogastra</i>  (Saltapared Ventre Blanco)</strong></p>
+      <audio controls>
+        <source src="../Yaaxtuch/R451_20240730_White-bellied--Wren.wav" type="audio/wav">
+      </audio>
+    </div>
+    <div class="category">
+      <img src="https://inaturalist-open-data.s3.amazonaws.com/photos/541274612/large.jpg" alt="Chara pea" class="species-img">
+      <p class="img-caption">Foto: Josh Vandermeulen / iNaturalista / CC-BY-NC-ND 4.0</p>
+      <p><strong>Brown Jay, <i>Cyanocorax morio</i>  (Chara pea)</strong></p>
+      <audio controls>
+        <source src="../Yaaxtuch/R451_20240807_Brown-Jay.mp3" type="audio/mpeg">
+      </audio>
+    </div>
+    <div class="category">
+      <img src="https://inaturalist-open-data.s3.amazonaws.com/photos/341985895/large.jpg" alt="Saltator Cabeza Negra" class="species-img">
+      <p class="img-caption">Foto: dbeeke / iNaturalist / CC-BY-NC 4.0</p>
+      <p><strong>Black-headed Saltator <i>Saltator atriceps</i>  (Saltador Cabeza Negra)</strong></p>
+      <audio controls>
+        <source src="../Yaaxtuch/R451_20240807_Black-headed--Saltator.mp3" type="audio/mpeg">
+      </audio>
+    </div>
+    <div class="category">
+      <img src="https://inaturalist-open-data.s3.amazonaws.com/photos/546990995/large.jpg" alt="Coa Cabeza Negra" class="species-img">
+      <p class="img-caption">Foto: leekelai / iNaturalist / CC-BY-NC 4.0</p>
+      <p><strong>Black-headed Trogon <i>Trogon melanocephalus</i>  (Coa Cabeza Negra)</strong></p>
+      <audio controls>
+        <source src="../Yaaxtuch/R451_20240807_Black-headed--Trogon.mp3" type="audio/mpeg">
+      </audio>
+    </div>
+  </div>
+  
+  <div class="audio-section">
+  <h2>Lista de especies detectadas</h2>
+
+  <div style="display:flex; gap:1em; align-items:center; justify-content:center; margin-bottom:1em;">
+    <input id="species-search" type="search" placeholder="Buscar (científico o común)..." style="padding:0.5em; width:60%;">
+    <span id="species-count" style="font-size:0.9em; color:#555;"></span>
+  </div>
+
+  <div style="overflow:auto;">
+    <table id="species-table" style="width:100%; border-collapse:collapse; background:#fff;">
+      <thead>
+        <tr>
+          <th data-key="scientific_name" style="cursor:pointer; border-bottom:2px solid #ddd; padding:8px; text-align:left;">
+            Nombre científico ▲▼
+          </th>
+          <th data-key="common_name" style="cursor:pointer; border-bottom:2px solid #ddd; padding:8px; text-align:left;">
+            Nombre común ▲▼
+          </th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  
+</div>
+
+<script>
+(async () => {
+  // 1) CONFIGURA AQUÍ la ruta a tu CSV:
+  const CSV_URL = '../Yaaxtuch/listadopreliminar.csv';
+
+  // 2) Utilidad para parsear CSV sencillo (sin comillas anidadas). Si tu CSV es complejo, te paso alternativa al final.
+  function parseCSV(text) {
+    const lines = text.replace(/\r/g, '').split('\n').filter(Boolean);
+    const headers = lines.shift().split(',').map(h => h.trim());
+    return lines.map(line => {
+      const cols = line.split(','); // para CSV simple; ver nota al final para CSV "difícil"
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = (cols[i] || '').trim());
+      return obj;
+    });
+  }
+
+  // 3) Carga de datos
+  let data = [];
+  try {
+    const resp = await fetch(CSV_URL, { cache: 'no-store' });
+    const text = await resp.text();
+    data = parseCSV(text);
+  } catch (e) {
+    console.error('Error cargando CSV:', e);
+  }
+
+  // 4) Render y utilidades
+  const tbody = document.querySelector('#species-table tbody');
+  const searchInput = document.querySelector('#species-search');
+  const countSpan = document.querySelector('#species-count');
+  const headers = document.querySelectorAll('#species-table thead th');
+
+  let sortState = { key: 'scientific_name', dir: 1 }; // 1 asc, -1 desc
+  let filtered = data.slice();
+
+  function renderRows(rows) {
+    tbody.innerHTML = rows.map(r => `
+      <tr>
+        <td style="border-bottom:1px solid #eee; padding:8px;"><i>${r.scientific_name || ''}</i></td>
+        <td style="border-bottom:1px solid #eee; padding:8px;">${r.common_name || ''}</td>
+      </tr>
+    `).join('');
+    countSpan.textContent = `${rows.length} registro(s)`;
+  }
+
+  function sortBy(key) {
+    if (sortState.key === key) sortState.dir *= -1; else { sortState.key = key; sortState.dir = 1; }
+    filtered.sort((a, b) => {
+      const A = (a[key] || '').toLowerCase();
+      const B = (b[key] || '').toLowerCase();
+      if (A < B) return -1 * sortState.dir;
+      if (A > B) return  1 * sortState.dir;
+      return 0;
+    });
+    renderRows(filtered);
+  }
+
+  function applyFilter() {
+    const q = searchInput.value.trim().toLowerCase();
+    filtered = data.filter(r =>
+      (r.scientific_name || '').toLowerCase().includes(q) ||
+      (r.common_name || '').toLowerCase().includes(q)
+    );
+    // mantener el orden actual
+    sortBy(sortState.key);
+  }
+
+  headers.forEach(th => {
+    th.addEventListener('click', () => sortBy(th.dataset.key));
+  });
+  searchInput.addEventListener('input', applyFilter);
+
+  // Render inicial
+  applyFilter();
+})();
+</script>
+
+
+  <div class="audio-section">
+    <div class="category">
+        <p style="text-align: center;">Nuestro agradecimiento al Área Natural Protegida Ya'ax-Tuch y a Linda Flor Argáez Calderón, Bacalar, Q.Roo</p>
+    </div>
+  </div>
+
+  <div class="audio-section">
+    <div class="category">
+        <p style="text-align: center;">Este sitio es parte del proyecto posdoctoral de Ronald A. Fernández-Gómez</p>
+        <p style="text-align: center;">Con el Apoyo de</p>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Logotipo_SECIHTI_2025-2030.svg" width="250">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Logo-UV.jpg" width="50">
+        <img src="https://soundsinthedarkness.org/wp-content/uploads/2023/10/ConMonoMaya-JPG-768x492.jpg" width="100">
+        <p style="text-align: center;"><img src="https://programs.wcs.org/portals/185/Rewild_Logo_Primaryat2x_1.png" width="50">
+        <img src="https://www.rufford.org/static/images/rufford-logo-menu-hr-360x155.png" width="50">
+        <img src="https://americanornithology.org/wp-content/themes/aos/dist/images/blog-placeholder.png" width="50">
+        </p>
+    </div>
+  </div>
+
+
+
+</body>
+</html>
