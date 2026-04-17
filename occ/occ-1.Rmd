@@ -62,6 +62,10 @@ head(effort)
 
 En este punto se incluyeron como covariables medidas de la diversidad de aves a partir de PAM en los sitios de muestreo. Se usó el modelo `BirdNET Global v2.4` para detectar aves presentes, se usó un *threshold* conservador de 0.9 de *confidence score* y se validó los registros de presencia de especies con distribución y ocurrencia de las especies en el área de estudio. Se incluye una variable de esfuerzo de muestreo en minutos de audio para controlar por dierencias en la cantidad de audios procesados.
 
+### Dimensions of bird diversity
+
+Use la aproximación de diversidad verdadera, por lo que calcule series de Hill para obtener tres órdenes de diversidad que inclyen correcciones sobre especies raras y dominantes: q0=riqueza (mismo peso para todas las especies), q1=Shannon efectivo (especies típicas), y q2=Simpson efectivo (especies dominantes).
+
 ```{r }
 site_cov <- read.csv("covBIRDS.csv", row.names = "X")
 names(site_cov)

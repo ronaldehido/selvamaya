@@ -2996,6 +2996,15 @@ validó los registros de presencia de especies con distribución y
 ocurrencia de las especies en el área de estudio. Se incluye una
 variable de esfuerzo de muestreo en minutos de audio para controlar por
 dierencias en la cantidad de audios procesados.</p>
+</div>
+<div id="dimensions-of-bird-diversity" class="section level3" number="2.3">
+<h3><span class="header-section-number">2.3</span> Dimensions of bird
+diversity</h3>
+<p>Use la aproximación de diversidad verdadera, por lo que calcule
+series de Hill para obtener tres órdenes de diversidad que inclyen
+correcciones sobre especies raras y dominantes: q0=riqueza (mismo peso
+para todas las especies), q1=Shannon efectivo (especies típicas), y
+q2=Simpson efectivo (especies dominantes).</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>site_cov <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;covBIRDS.csv&quot;</span>, <span class="at">row.names =</span> <span class="st">&quot;X&quot;</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">names</span>(site_cov)</span></code></pre></div>
 <pre><code>## [1] &quot;div.q0rich&quot;  &quot;div.q1shan&quot;  &quot;div.q2simp&quot;  &quot;eff.recmins&quot;</code></pre>
