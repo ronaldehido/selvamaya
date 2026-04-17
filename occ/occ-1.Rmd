@@ -1,0 +1,229 @@
+---
+title: |
+  Occupancy model for *Ateles geoffroyii*
+  <br>
+  standard single season model
+subtitle: "version 1"
+author: "Ron A. Fernández-Gómez"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    number_sections: true
+    theme: flatly
+    highlight: tango
+    code_folding: show
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 8,
+  fig.height = 5
+)
+```
+
+```{r }
+library(unmarked)
+library(tidyverse)
+library(MuMIn)
+library(corrplot)
+library(AICcmodavg)
+library(knitr)
+```
+
+## Detection histories
+
+Matriz con las detecciones acusticas de **mono araña** usando el modelo V3 y que fueron valiadas por expertos. Las detecciónes provienen de audios de 42 unidades de grabación que fueron desplegadas en la Selva Maya en la Península de Yucatán entre diciembre 2024 a enero 2025
+
+```{r }
+det.his <- read.csv("detectATEGEO-2.csv", row.names = "X")
+head(det.his)
+```
+
+## The covariates
+
+### Sampling effort covariates
+
+Se generó una matriz de esfuerzo de muestreo en minutos a partir de la ventana temporal de audios utilizados en la inferencia del algortimo `WildMon V3` para detectar al mono araña. seleccionando muestreos diarios entre 4am hasta 9pm a partir de grabaciones de un minuto realizadas espaciadamente por un minuto.
+
+```{r }
+effort <- read.csv("effort.csv", row.names = "X")
+head(effort)
+```
+
+### Site covariates
+
+En este punto se incluyeron como covariables medidas de la diversidad de aves a partir de PAM en los sitios de muestreo. Se usó el modelo `BirdNET Global v2.4` para detectar aves presentes, se usó un *threshold* conservador de 0.9 de *confidence score* y se validó los registros de presencia de especies con distribución y ocurrencia de las especies en el área de estudio. Se incluye una variable de esfuerzo de muestreo en minutos de audio para controlar por dierencias en la cantidad de audios procesados.
+
+```{r }
+site_cov <- read.csv("covBIRDS.csv", row.names = "X")
+names(site_cov)
+head(site_cov)
+```
+
+## Plot of detection histories
+
+se grafica la ventana temporal de las detecciones usando un objeto *unmarked*
+
+```{r }
+unm_det.his <- unmarkedFrameOccu(y = as.matrix(det.his))
+summary(unm_det.his)
+
+plot(unm_det.his,main = expression("Validated detections of " ~ italic("Ateles geoffroyii")))
+```
+
+## Naive detection
+
+ocupacion consderando proprcion de istios con al menos una deteccion
+
+```{r }
+naive_occ <- sum(ifelse(rowSums(det.his, na.rm = TRUE) > 0, 1, 0)) / nrow(det.his)
+naive_occ
+```
+
+## Null model
+
+Modelo con deteccion y ocupacion constante
+
+```{r }
+null.mod <- occu(~1 ~1, data = unm_det.his)
+summary(null.mod)
+
+# probabilidad de detección
+p_null <- backTransform(null.mod, type = "det")
+p_null
+
+# probabilidad de ocupación
+psi_null <- backTransform(null.mod, type = "state")
+psi_null
+```
+
+## Standarization of covariates
+
+estandarización de las covariables
+
+```{r }
+site_cov <- stdize(site_cov)
+effort <- stdize(effort)
+
+head(site_cov)
+head(effort)
+```
+
+## Full unmarked object
+
+se construye el objeto de datos de ocupación con todas las covariables de sitio y observación
+
+```{r }
+ategeo <- unmarkedFrameOccu(
+  y = as.matrix(det.his),
+  siteCovs = site_cov,
+  obsCovs = list(effort = effort)
+)
+
+summary(ategeo)
+
+str(ategeo)
+head(ategeo)
+```
+
+## Multicolinearity
+
+Se revisa si hay alta correlacion entre varibles
+
+```{r }
+m2 <- cor(site_cov, method = "spearman")
+corrplot.mixed(
+  m2,
+  upper = "ellipse",
+  lower = "number",
+  tl.pos = "lt",
+  tl.col = "black",
+  tl.offset = 1,
+  tl.srt = 0
+)
+```
+
+## Models
+
+se ajusta un modelo global completo y en este caso un segundo modelo simplificado en base al AIC restringiendose a variables con baja correlacion
+
+### Global model
+
+```{r }
+glob.mod <- occu(
+  formula = ~ effort ~ z.div.q0rich + z.div.q1shan + z.div.q2simp + z.eff.recmins,
+  data = ategeo
+)
+summary(glob.mod)
+```
+
+### Fitted Model
+
+```{r }
+occu.sm <- occu(
+  formula = ~ effort ~ z.div.q2simp + z.eff.recmins,
+  data = ategeo
+)
+summary(occu.sm)
+```
+
+```{r }
+# probabilidad de detección
+estimate.p.nm <- occu.sm@estimates@estimates$det@estimates
+p <- plogis(estimate.p.nm)
+p
+
+# probabilidad de ocupación
+estimate.psi.nm <- occu.sm@estimates@estimates$state@estimates
+psi <- plogis(estimate.psi.nm)
+psi
+
+```
+
+## Prediction across Simpson birds diversity
+
+se predice la ocupación del mono araña en base a una métrica de diversidad de aves (q2 -\> Simpson) mientras se controla por esfuerzo de muestreo
+
+```{r}
+newdata_simpson <- data.frame(
+  z.div.q2simp = seq(
+    min(site_cov$z.div.q2simp, na.rm = TRUE),
+    max(site_cov$z.div.q2simp, na.rm = TRUE),
+    by = 0.01
+  ),
+  z.eff.recmins = mean(site_cov$z.eff.recmins, na.rm = TRUE),
+  effort = mean(as.matrix(effort), na.rm = TRUE)
+)
+
+predict_simpson.cov <- cbind(
+  predict(occu.sm, newdata = newdata_simpson, type = "state"),
+  newdata_simpson
+)
+
+head(predict_simpson.cov)
+```
+
+### Plot predicted ocupancy
+
+```{r}
+ggplot(data = predict_simpson.cov, aes(x = z.div.q2simp, y = Predicted)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), fill = "skyblue", alpha = 0.4) +
+  geom_line(color = "black", linewidth = 1) +
+  labs(
+    x = "Bird diversity (standardized Simpson dominance)",
+    y = "Predicted occupancy of spider monkey"
+  ) +
+  theme_classic()
+```
+
+```{r}
+sessionInfo()
+```
