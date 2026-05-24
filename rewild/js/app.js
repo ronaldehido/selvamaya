@@ -1,5 +1,5 @@
 const csvPath = "data/detections_spimon.csv";
-const imagePath = "img/mono-arana.jpg";
+const imagePath = "img/Monoarana-animalbanknet.jpg";
 
 const width = 520;
 const height = 620;
@@ -139,7 +139,7 @@ function drawCircularChart(data) {
         .style("top", `${event.offsetY}px`)
         .html(`
           <strong>Horario:</strong> ${start} - ${end}<br>
-          <strong>Detecciones máximas por día:</strong> ${d.data.maxDailyCount}
+          //<strong>Detecciones máximas:</strong> ${d.data.maxDailyCount}
         `);
     })
     .on("mouseleave", function(event, d) {
@@ -239,7 +239,7 @@ function drawTimeline(data) {
     .attr("y", timelineY - 112)
     .attr("font-size", 13)
     .attr("fill", "#6b7280")
-    .text("Detecciones máximas por día");
+    .text("Detecciones máximas");
 
   svg.append("path")
     .datum(grouped)
