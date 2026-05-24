@@ -1,8 +1,8 @@
 const csvPath = "data/detections_spimon.csv";
 const imagePath = "img/mono-arana.jpg";
 
-const width = 320;
-const height = 420;
+const width = 520;
+const height = 620;
 const cx = width / 2;
 const cy = 230;
 
