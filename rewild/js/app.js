@@ -17,8 +17,7 @@ const svg = d3
   .select("#circular-chart")
   .append("svg")
   .attr("viewBox", `0 0 ${width} ${height}`)
-  .attr("width", "100%")
-  .attr("max-width", width);
+  .attr("width", "100%");
 
 const tooltip = d3.select("#tooltip");
 
@@ -28,10 +27,14 @@ d3.csv(csvPath).then(data => {
       site: d.Site,
       confidence: +d.Confidence,
       date: d.Date,
+      year: +d.Year,
+      month: +d.Month,
+      day: +d.Day,
       hour: +d.HH,
       minute: +d.MM
     }))
     .filter(d =>
+      d.date &&
       !isNaN(d.hour) &&
       !isNaN(d.minute) &&
       d.hour >= 0 &&
@@ -44,45 +47,58 @@ d3.csv(csvPath).then(data => {
   drawTimeline(clean);
 });
 
-function drawCircularChart(data) {
+function getAverageByInterval(data) {
   const grouped = Array.from({ length: intervalsPerDay }, (_, i) => ({
     index: i,
     startMinute: i * intervalMinutes,
-    count: 0
+    count: 0,
+    average: 0
   }));
 
-  const uniqueDays = new Set(data.map(d => d.date));
+  const uniqueDays = new Set(
+    data.map(d => d.date || `${d.year}-${d.month}-${d.day}`)
+  );
+
   const numberOfDays = uniqueDays.size || 1;
 
   data.forEach(d => {
     const totalMinutes = d.hour * 60 + d.minute;
     const index = Math.floor(totalMinutes / intervalMinutes);
-  grouped[index].count += 1;
+    grouped[index].count += 1;
   });
 
   grouped.forEach(d => {
     d.average = d.count / numberOfDays;
   });
 
-  const maxCount = d3.max(grouped, d => d.average) || 1;
+  return {
+    grouped,
+    numberOfDays
+  };
+}
+
+function drawCircularChart(data) {
+  const { grouped, numberOfDays } = getAverageByInterval(data);
+
+  const maxAverage = d3.max(grouped, d => d.average) || 1;
 
   const pie = d3
     .pie()
     .value(1)
     .sort(null);
 
-  const arc = d3
-    .arc()
-    .innerRadius(innerRadius)
-    .outerRadius(d => {
-      const value = d.data.average / maxCount;
-      return outerRadius + value * 28;
-    });
-
   const baseArc = d3
     .arc()
     .innerRadius(innerRadius)
     .outerRadius(outerRadius);
+
+  const activeArc = d3
+    .arc()
+    .innerRadius(innerRadius)
+    .outerRadius(d => {
+      const value = d.data.average / maxAverage;
+      return outerRadius + value * 28;
+    });
 
   const g = svg
     .append("g")
@@ -101,11 +117,11 @@ function drawCircularChart(data) {
     .data(pie(grouped))
     .join("path")
     .attr("class", "segment")
-    .attr("d", arc)
-    .attr("fill", d => d.data.count > 0 ? "#8b6cff" : "transparent")
-    .attr("stroke", d => d.data.count > 0 ? "#ffffff" : "transparent")
+    .attr("d", activeArc)
+    .attr("fill", d => d.data.average > 0 ? "#8b6cff" : "transparent")
+    .attr("stroke", d => d.data.average > 0 ? "#ffffff" : "transparent")
     .attr("stroke-width", 1)
-    .attr("opacity", d => d.data.count > 0 ? 0.85 : 0)
+    .attr("opacity", d => d.data.average > 0 ? 0.85 : 0)
     .on("mousemove", function(event, d) {
       d3.select(this)
         .attr("fill", "#5b3df5")
@@ -121,13 +137,14 @@ function drawCircularChart(data) {
         .html(`
           <strong>Horario:</strong> ${start} - ${end}<br>
           <strong>Promedio diario:</strong> ${d.data.average.toFixed(2)}<br>
-          <strong>Total:</strong> ${d.data.count}
+          <strong>Total detecciones:</strong> ${d.data.count}<br>
+          <strong>Días muestreados:</strong> ${numberOfDays}
         `);
     })
     .on("mouseleave", function(event, d) {
       d3.select(this)
-        .attr("fill", d.data.count > 0 ? "#8b6cff" : "transparent")
-        .attr("opacity", d.data.count > 0 ? 0.85 : 0);
+        .attr("fill", d.data.average > 0 ? "#8b6cff" : "transparent")
+        .attr("opacity", d.data.average > 0 ? 0.85 : 0);
 
       tooltip.style("opacity", 0);
     });
@@ -194,22 +211,11 @@ function drawCircularChart(data) {
 }
 
 function drawTimeline(data) {
+  const { grouped } = getAverageByInterval(data);
+
   const timelineY = 520;
   const marginX = 55;
   const chartWidth = width - marginX * 2;
-
-  const grouped = Array.from({ length: intervalsPerDay }, (_, i) => ({
-    index: i,
-    minute: i * intervalMinutes,
-    count: 0
-  }));
-
-  const uniqueDays = new Set(data.map(d => d.date));
-  const numberOfDays = uniqueDays.size || 1;
-
-  grouped.forEach(d => {
-    d.average = d.count / numberOfDays;
-  });
 
   const x = d3
     .scaleLinear()
@@ -223,7 +229,7 @@ function drawTimeline(data) {
 
   const line = d3
     .line()
-    .x(d => x(d.minute))
+    .x(d => x(d.startMinute))
     .y(d => y(d.average))
     .curve(d3.curveMonotoneX);
 
@@ -232,7 +238,7 @@ function drawTimeline(data) {
     .attr("y", timelineY - 112)
     .attr("font-size", 13)
     .attr("fill", "#6b7280")
-    .text("Línea de tiempo diaria");
+    .text("Promedio diario de detecciones");
 
   svg.append("path")
     .datum(grouped)
@@ -243,8 +249,8 @@ function drawTimeline(data) {
     .data(grouped)
     .join("circle")
     .attr("class", "timeline-dot")
-    .attr("cx", d => x(d.minute))
-    .attr("cy", d => y(d.count))
+    .attr("cx", d => x(d.startMinute))
+    .attr("cy", d => y(d.average))
     .attr("r", 2.5);
 
   svg.append("line")
