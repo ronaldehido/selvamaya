@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BioTablero | Mono araña</title>
+
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- D3.js -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+</head>
+
+<body>
+  <main class="dashboard">
+
+    <section class="hero">
+      <h1>Monitoreo acústico pasivo del mono araña</h1>
+      <p>
+        Visualización de detecciones acústicas generadas con BirdNET.
+        El gráfico resume un día promedio de 24 horas.
+      </p>
+    </section>
+
+    <section class="card">
+      <div class="chart-header">
+        <div>
+          <h2>Actividad diaria promedio</h2>
+          <p>Detecciones agrupadas por intervalos de 30 minutos</p>
+        </div>
+        <strong>24 h</strong>
+      </div>
+
+      <div id="circular-chart"></div>
+
+      <div id="tooltip" class="tooltip"></div>
+    </section>
+
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
