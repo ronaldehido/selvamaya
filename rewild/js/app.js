@@ -51,13 +51,20 @@ function drawCircularChart(data) {
     count: 0
   }));
 
+  const uniqueDays = new Set(data.map(d => d.date));
+  const numberOfDays = uniqueDays.size || 1;
+
   data.forEach(d => {
     const totalMinutes = d.hour * 60 + d.minute;
     const index = Math.floor(totalMinutes / intervalMinutes);
-    grouped[index].count += 1;
+  grouped[index].count += 1;
   });
 
-  const maxCount = d3.max(grouped, d => d.count) || 1;
+  grouped.forEach(d => {
+    d.average = d.count / numberOfDays;
+  });
+
+  const maxCount = d3.max(grouped, d => d.average) || 1;
 
   const pie = d3
     .pie()
@@ -68,7 +75,7 @@ function drawCircularChart(data) {
     .arc()
     .innerRadius(innerRadius)
     .outerRadius(d => {
-      const value = d.data.count / maxCount;
+      const value = d.data.average / maxCount;
       return outerRadius + value * 28;
     });
 
