@@ -120,7 +120,8 @@ function drawCircularChart(data) {
         .style("top", `${event.offsetY}px`)
         .html(`
           <strong>Horario:</strong> ${start} - ${end}<br>
-          <strong>Detecciones:</strong> ${d.data.count}
+          <strong>Promedio diario:</strong> ${d.data.average.toFixed(2)}<br>
+          <strong>Total:</strong> ${d.data.count}
         `);
     })
     .on("mouseleave", function(event, d) {
@@ -203,10 +204,11 @@ function drawTimeline(data) {
     count: 0
   }));
 
-  data.forEach(d => {
-    const totalMinutes = d.hour * 60 + d.minute;
-    const index = Math.floor(totalMinutes / intervalMinutes);
-    grouped[index].count += 1;
+  const uniqueDays = new Set(data.map(d => d.date));
+  const numberOfDays = uniqueDays.size || 1;
+
+  grouped.forEach(d => {
+    d.average = d.count / numberOfDays;
   });
 
   const x = d3
@@ -216,13 +218,13 @@ function drawTimeline(data) {
 
   const y = d3
     .scaleLinear()
-    .domain([0, d3.max(grouped, d => d.count) || 1])
+    .domain([0, d3.max(grouped, d => d.average) || 1])
     .range([timelineY, timelineY - 90]);
 
   const line = d3
     .line()
     .x(d => x(d.minute))
-    .y(d => y(d.count))
+    .y(d => y(d.average))
     .curve(d3.curveMonotoneX);
 
   svg.append("text")
