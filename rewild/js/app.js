@@ -44,6 +44,7 @@ d3.csv(csvPath).then(data => {
 
   drawCircularChart(clean);
   drawTimeline(clean);
+  drawHeatmap(clean);
 });
 
 function getMaxDetectionsByInterval(data) {
@@ -277,4 +278,101 @@ function minutesToTime(minutes) {
   const min = m % 60;
 
   return `${String(h).padStart(2, "0")}:${String(min).padStart(2, "0")}`;
+}
+
+function drawHeatmap(data) {
+  const heatmapWidth = 760;
+  const heatmapHeight = 520;
+
+  const margin = {
+    top: 30,
+    right: 90,
+    bottom: 70,
+    left: 90
+  };
+
+  const chartWidth = heatmapWidth - margin.left - margin.right;
+  const chartHeight = heatmapHeight - margin.top - margin.bottom;
+
+  const svgHeatmap = d3
+    .select("#heatmap-chart")
+    .append("svg")
+    .attr("viewBox", `0 0 ${heatmapWidth} ${heatmapHeight}`)
+    .attr("width", "100%");
+
+  const hourlyCounts = Array.from({ length: 24 }, (_, hour) => ({
+    hour,
+    count: 0
+  }));
+
+  data.forEach(d => {
+    hourlyCounts[d.hour].count += 1;
+  });
+
+  const maxCount = d3.max(hourlyCounts, d => d.count) || 1;
+
+  const heatmapData = [];
+
+  hourlyCounts.forEach(d => {
+    for (let x = 0; x <= maxCount; x++) {
+      heatmapData.push({
+        hour: d.hour,
+        countBin: x,
+        probability: x <= d.count ? d.count / d3.sum(hourlyCounts, h => h.count) : 0
+      });
+    }
+  });
+
+  const x = d3
+    .scaleLinear()
+    .domain([0, maxCount])
+    .range([0, chartWidth]);
+
+  const y = d3
+    .scaleBand()
+    .domain(d3.range(24))
+    .range([0, chartHeight])
+    .padding(0.08);
+
+  const color = d3
+    .scaleSequential()
+    .domain([0, d3.max(heatmapData, d => d.probability) || 1])
+    .interpolator(d3.interpolateYlOrRd);
+
+  const g = svgHeatmap
+    .append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+  g.selectAll("rect")
+    .data(heatmapData)
+    .join("rect")
+    .attr("x", d => x(d.countBin))
+    .attr("y", d => y(d.hour))
+    .attr("width", chartWidth / (maxCount + 1))
+    .attr("height", y.bandwidth())
+    .attr("fill", d => d.probability > 0 ? color(d.probability) : "#f8fafc");
+
+  g.append("g")
+    .call(d3.axisLeft(y).tickFormat(d => `${String(d).padStart(2, "0")}:00`));
+
+  g.append("g")
+    .attr("transform", `translate(0, ${chartHeight})`)
+    .call(d3.axisBottom(x).ticks(8));
+
+  svgHeatmap.append("text")
+    .attr("x", heatmapWidth / 2)
+    .attr("y", heatmapHeight - 20)
+    .attr("text-anchor", "middle")
+    .attr("font-size", 16)
+    .attr("font-weight", "700")
+    .text("Detecciones por hora");
+
+  svgHeatmap.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -heatmapHeight / 2)
+    .attr("y", 24)
+    .attr("text-anchor", "middle")
+    .attr("font-size", 16)
+    .attr("font-weight", "700")
+    .text("Hora del día");
 }
