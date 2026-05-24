@@ -1,8 +1,8 @@
 const csvPath = "data/detections_spimon.csv";
 const imagePath = "img/mono-arana.jpg";
 
-const width = 520;
-const height = 620;
+const width = 320;
+const height = 420;
 const cx = width / 2;
 const cy = 230;
 
@@ -26,7 +26,7 @@ d3.csv(csvPath).then(data => {
     .map(d => ({
       site: d.Site,
       confidence: +d.Confidence,
-      date: d.Date || `${d.Year}-${d.Month}-${d.Day}`,
+      date: d.Date,
       year: +d.Year,
       month: +d.Month,
       day: +d.Day,
@@ -34,7 +34,6 @@ d3.csv(csvPath).then(data => {
       minute: +d.MM
     }))
     .filter(d =>
-      d.date &&
       !isNaN(d.hour) &&
       !isNaN(d.minute) &&
       d.hour >= 0 &&
@@ -47,38 +46,34 @@ d3.csv(csvPath).then(data => {
   drawTimeline(clean);
 });
 
-function getMaxByInterval(data) {
+function getMaxDetectionsByInterval(data) {
   const grouped = Array.from({ length: intervalsPerDay }, (_, i) => ({
     index: i,
     startMinute: i * intervalMinutes,
-    totalCount: 0,
-    maxDailyCount: 0,
-    maxDate: null
+    maxDailyCount: 0
   }));
 
-  const dailyIntervalCounts = new Map();
+  const countsByDayAndInterval = {};
 
   data.forEach(d => {
+    const dateKey = d.date || `${d.year}-${d.month}-${d.day}`;
     const totalMinutes = d.hour * 60 + d.minute;
     const intervalIndex = Math.floor(totalMinutes / intervalMinutes);
 
-    const key = `${d.date}_${intervalIndex}`;
+    const key = `${dateKey}_${intervalIndex}`;
 
-    dailyIntervalCounts.set(
-      key,
-      (dailyIntervalCounts.get(key) || 0) + 1
-    );
+    if (!countsByDayAndInterval[key]) {
+      countsByDayAndInterval[key] = 0;
+    }
 
-    grouped[intervalIndex].totalCount += 1;
+    countsByDayAndInterval[key] += 1;
   });
 
-  dailyIntervalCounts.forEach((count, key) => {
-    const [date, intervalIndexText] = key.split("_");
-    const intervalIndex = +intervalIndexText;
+  Object.entries(countsByDayAndInterval).forEach(([key, count]) => {
+    const intervalIndex = Number(key.split("_").pop());
 
     if (count > grouped[intervalIndex].maxDailyCount) {
       grouped[intervalIndex].maxDailyCount = count;
-      grouped[intervalIndex].maxDate = date;
     }
   });
 
@@ -86,8 +81,7 @@ function getMaxByInterval(data) {
 }
 
 function drawCircularChart(data) {
-  const grouped = getMaxByInterval(data);
-
+  const grouped = getMaxDetectionsByInterval(data);
   const maxValue = d3.max(grouped, d => d.maxDailyCount) || 1;
 
   const pie = d3
@@ -144,9 +138,7 @@ function drawCircularChart(data) {
         .style("top", `${event.offsetY}px`)
         .html(`
           <strong>Horario:</strong> ${start} - ${end}<br>
-          <strong>Máximo diario:</strong> ${d.data.maxDailyCount}<br>
-          <strong>Fecha del máximo:</strong> ${d.data.maxDate || "Sin detecciones"}<br>
-          <strong>Total del muestreo:</strong> ${d.data.totalCount}
+          <strong>Detecciones máximas por día:</strong> ${d.data.maxDailyCount}
         `);
     })
     .on("mouseleave", function(event, d) {
@@ -219,7 +211,7 @@ function drawCircularChart(data) {
 }
 
 function drawTimeline(data) {
-  const grouped = getMaxByInterval(data);
+  const grouped = getMaxDetectionsByInterval(data);
 
   const timelineY = 520;
   const marginX = 55;
@@ -246,7 +238,7 @@ function drawTimeline(data) {
     .attr("y", timelineY - 112)
     .attr("font-size", 13)
     .attr("fill", "#6b7280")
-    .text("Máximo diario de detecciones por intervalo");
+    .text("Detecciones máximas por día");
 
   svg.append("path")
     .datum(grouped)
