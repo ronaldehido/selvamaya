@@ -1,31 +1,16 @@
 async function loadProjectCard() {
   try {
     const response = await fetch("content/proyecto.md");
-
-    if (!response.ok) {
-      console.error("No se encontró content/proyecto.md");
-      return;
-    }
-
     const text = await response.text();
-    const match = text.match(/---([\s\S]*?)---/);
 
-    if (!match) {
-      console.error("El archivo proyecto.md no tiene front matter válido.");
-      return;
-    }
+    const match = text.match(/---([\s\S]*?)---/);
+    if (!match) return;
 
     const parsed = jsyaml.load(match[1]);
     const container = document.getElementById("project-content");
+    if (!container) return;
 
-    if (!container) {
-      console.error("No existe #project-content en index.html");
-      return;
-    }
-
-    const logoGroups = parsed.logoGroups || [];
-
-    const groupsHTML = logoGroups.map(group => {
+    const groupsHTML = (parsed.logoGroups || []).map(group => {
       const logosHTML = (group.logos || []).map(item => `
         <a href="${item.link}" target="_blank" rel="noopener noreferrer" title="${item.name}">
           <img src="${item.image}" alt="${item.name}">
@@ -35,9 +20,7 @@ async function loadProjectCard() {
       return `
         <div class="logo-group">
           <p class="logo-group-title">${group.title}</p>
-          <div class="logo-row">
-            ${logosHTML}
-          </div>
+          <div class="logo-row">${logosHTML}</div>
         </div>
       `;
     }).join("");
@@ -48,9 +31,8 @@ async function loadProjectCard() {
         ${groupsHTML}
       </div>
     `;
-
   } catch (error) {
-    console.error("Error cargando la tarjeta del proyecto:", error);
+    console.error("Error cargando proyecto:", error);
   }
 }
 

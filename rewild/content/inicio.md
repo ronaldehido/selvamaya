@@ -1,9 +1,9 @@
 ---
-title: PAM for detecting Geoffroy's spider monkey
-subtitle: Visualization of acoustic detections
-hero_image: /img/Monoarana-animalbanknet.jpg
+title: "PAM for detecting Geoffroy's spider monkey"
+subtitle: "Visualization of acoustic detections"
+hero_image: "/img/Monoarana-animalbanknet.jpg"
 menuOrder: 1
-description: Passive acoustic monitoring for detecting Geoffroy's spider monkey in the Selva Maya of Yucatan Peninsula
+description: "Passive acoustic monitoring for detecting Geoffroy's spider monkey in the Selva Maya of Yucatan Peninsula"
 keywords:
     - PAM
     - Selva Maya
