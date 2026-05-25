@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BioTablero ReWild | Mono araña</title>
+  <title>BioTablero ReWild | Spider monkey</title>
 
   <link rel="stylesheet" href="css/style.css" />
 
@@ -15,18 +15,30 @@
   <main class="dashboard">
 
     <section class="hero">
-      <h1>Monitoreo acústico pasivo para detectar al mono araña de Geoffroy</h1>
-      <p>
-        Visualización de detecciones acústicas
-      </p>
+      <h1 id="hero-title"></h1>
+      <p id="hero-description"></p>
+    </section>
+
+    <section class="card audio-card">
+      <div class="chart-header">
+        <div>
+          <h2>Sounds of spider monkeys</h2>
+          <p>compilation of vocalizations of spider monkeys</p>
+        </div>
+      </div>
+
+      <div class="audio-player">
+        <button id="play-audio" class="play-button">▶</button>
+        <div id="waveform"></div>
+      </div>
     </section>
 
     <section class="card">
       <div class="chart-header">
         <div>
-          <h2>Actividad durante el día</h2>
-          <p>Detecciones agrupadas por intervalos de 30 minutos</p>
-          <p>Se muestran los valores máximos detectados durante el muestreo</p>
+          <h2>Activity during the day</h2>
+          <p>Detections grouped by 30-minute intervals</p>
+          <p>Maximum values detected during sampling are displayed</p>
         </div>
         <strong>24 h</strong>
       </div>
@@ -37,18 +49,29 @@
     </section>
 
     <section class="card">
-  <div class="chart-header">
-    <div>
-      <h2>Probabilidad relativa de detección</h2>
-      <p>Distribución de detecciones acústicas por hora del día</p>
-    </div>
-  </div>
+      <div class="chart-header">
+        <div>
+          <h2>Relative detection probability</h2>
+          <p>Distribution of acoustic detections by hour of the day</p>
+        </div>
+      </div>
+      <div id="heatmap-chart"></div>
+    </section>
 
-  <div id="heatmap-chart"></div>
-</section>
+    <section class="card project-card">
+      <div id="project-content"></div>
+    </section>
 
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://unpkg.com/wavesurfer.js@7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
+
+  <script src="js/content-loader.js"></script>
+  <script src="js/project-loader.js"></script>
+  <script src="js/audio-player.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

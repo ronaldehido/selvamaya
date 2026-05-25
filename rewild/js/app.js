@@ -138,8 +138,8 @@ function drawCircularChart(data) {
         .style("left", `${event.offsetX}px`)
         .style("top", `${event.offsetY}px`)
         .html(`
-          <strong>Horario:</strong> ${start} - ${end}<br>
-          //<strong>Detecciones máximas:</strong> ${d.data.maxDailyCount}
+          <strong>Time of day:</strong> ${start} - ${end}<br>
+          <strong>Maximum detections:</strong> ${d.data.maxDailyCount}
         `);
     })
     .on("mouseleave", function(event, d) {
@@ -239,7 +239,7 @@ function drawTimeline(data) {
     .attr("y", timelineY - 112)
     .attr("font-size", 13)
     .attr("fill", "#6b7280")
-    .text("Detecciones máximas");
+    //.text("Maximum detections");
 
   svg.append("path")
     .datum(grouped)
@@ -365,7 +365,7 @@ function drawHeatmap(data) {
     .attr("text-anchor", "middle")
     .attr("font-size", 16)
     .attr("font-weight", "700")
-    .text("Detecciones por hora");
+    .text("Probability of detections");
 
   svgHeatmap.append("text")
     .attr("transform", "rotate(-90)")
@@ -374,5 +374,5 @@ function drawHeatmap(data) {
     .attr("text-anchor", "middle")
     .attr("font-size", 16)
     .attr("font-weight", "700")
-    .text("Hora del día");
+    .text("Time of day");
 }
