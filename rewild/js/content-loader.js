@@ -1,22 +1,48 @@
 async function loadContent() {
   try {
-    const response = await fetch("./content/inicio.md");
+
+    const basePath =
+      window.location.hostname.includes("github.io")
+        ? "/selvamaya/rewild"
+        : "";
+
+    const response = await fetch(
+      `${basePath}/content/inicio.md`
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `No se pudo cargar inicio.md (${response.status})`
+      );
+    }
+
     const text = await response.text();
 
-    const match = text.match(/^---\s*([\s\S]*?)\s*---/);
+    const match = text.match(/---([\s\S]*?)---/);
 
-    if (!match) return;
+    if (!match) {
+      throw new Error("Front matter no encontrado");
+    }
 
     const metadata = jsyaml.load(match[1]);
 
-    document.getElementById("hero-title").textContent =
-      metadata.title || "";
+    const titleEl = document.getElementById("hero-title");
+    const descEl = document.getElementById("hero-description");
 
-    document.getElementById("hero-description").textContent =
-      metadata.description || "";
+    if (titleEl) {
+      titleEl.textContent = metadata.title || "";
+    }
+
+    if (descEl) {
+      descEl.textContent =
+        metadata.description || "";
+    }
 
   } catch (error) {
-    console.error("Error cargando contenido:", error);
+    console.error(
+      "Error cargando inicio.md:",
+      error
+    );
   }
 }
 
