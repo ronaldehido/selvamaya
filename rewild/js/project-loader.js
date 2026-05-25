@@ -1,6 +1,6 @@
 async function loadProjectCard() {
   try {
-    const response = await fetch("content/proyecto.md");
+    const response = await fetch("./content/proyecto.md");
     const text = await response.text();
 
     const match = text.match(/---([\s\S]*?)---/);

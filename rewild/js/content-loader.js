@@ -1,6 +1,6 @@
 async function loadContent() {
   try {
-    const response = await fetch("content/inicio.md");
+    const response = await fetch("./content/inicio.md");
     const text = await response.text();
 
     const match = text.match(/^---\s*([\s\S]*?)\s*---/);
