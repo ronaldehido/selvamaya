@@ -1,0 +1,40 @@
+{
+  "projectText": "This website is part Primate Action Fund 2025-2026 project: Surveying Geoffroy's spider monkeys and their predators to pave the way for a biological corridor in the Yucatan Peninsula, Mexico",
+  "logoGroups": [
+    {
+      "title": "Funded by",
+      "logos": [
+        {
+          "name": "Rewild",
+          "image": "https://programs.wcs.org/portals/185/Rewild_Logo_Primaryat2x_1.png",
+          "link": "https://www.rewild.org"
+        }
+      ]
+    },
+    {
+      "title": "Supported by",
+      "logos": [
+        {
+          "name": "SECIHTI",
+          "image": "https://upload.wikimedia.org/wikipedia/commons/1/17/Logotipo_SECIHTI_2025-2030.svg",
+          "link": "https://www.gob.mx/secihti"
+        }
+      ]
+    },
+    {
+      "title": "Local partners",
+      "logos": [
+        {
+          "name": "Universidad Veracruzana",
+          "image": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Logo-UV.jpg",
+          "link": "https://www.uv.mx"
+        },
+        {
+          "name": "ConMonoMaya",
+          "image": "img/conmonomaya.jpg",
+          "link": "https://www.instagram.com/conmonomaya/"
+        }
+      ]
+    }
+  ]
+}
