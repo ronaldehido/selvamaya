@@ -3,33 +3,11 @@ async function loadContent() {
     const response = await fetch("content/inicio.md");
     const text = await response.text();
 
-    const frontmatterRegex = /---([\s\S]*?)---/;
-    const match = text.match(frontmatterRegex);
+    const match = text.match(/^---\s*([\s\S]*?)\s*---/);
 
-    let metadata = {};
-    let markdownBody = text;
+    if (!match) return;
 
-    if (match) {
-      const frontMatter = match[1];
-
-      markdownBody = text.replace(frontmatterRegex, "").trim();
-
-      frontMatter.split("\n").forEach(line => {
-        const parts = line.split(":");
-
-        if (parts.length >= 2) {
-          const key = parts[0].trim();
-
-          const value = parts
-            .slice(1)
-            .join(":")
-            .trim()
-            .replace(/^["']|["']$/g, "");
-
-          metadata[key] = value;
-        }
-      });
-    }
+    const metadata = jsyaml.load(match[1]);
 
     document.getElementById("hero-title").textContent =
       metadata.title || "";
