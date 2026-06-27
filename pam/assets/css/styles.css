@@ -1,0 +1,177 @@
+:root{
+  --forest:#12372a; --forest-2:#1f5f46; --moss:#7c9b59; --sand:#f3ead8;
+  --clay:#c8783f; --ink:#18221d; --muted:#66736c; --card:#fffdf8;
+  --shadow:0 18px 50px rgba(18,55,42,.14); --radius:22px;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:#fbf7ef;line-height:1.55}
+h1,h2{font-family:"Source Serif 4",Georgia,serif;line-height:1.05;margin:0 0 1rem}
+h1{font-size:clamp(2.3rem,6vw,5.5rem)} h2{font-size:clamp(1.9rem,4vw,3rem)}
+code{background:#efe5cf;padding:.15rem .35rem;border-radius:6px}
+.site-header{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:1rem 5vw;background:rgba(251,247,239,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(18,55,42,.08)}
+.brand{font-weight:800;color:var(--forest);text-decoration:none}
+
+nav{display:flex;gap:1rem;flex-wrap:wrap} nav a{color:var(--forest);text-decoration:none;font-weight:700;font-size:.95rem}
+
+nav{
+    display:flex;
+    align-items:center;
+    gap:24px;
+}
+
+/* ---------- Dropdown ---------- */
+.dropdown{
+    position:relative;
+}
+
+.dropbtn{
+    background:none;
+    border:none;
+    font:inherit;
+    color:rgb(3, 99, 75);
+    cursor:pointer;
+    padding:10px 0;
+}
+
+.dropdown-content{
+    position:absolute;
+    top:100%;
+    left:0;
+    min-width:180px;
+    background:white;
+    border-radius:10px;
+    box-shadow:0 8px 24px rgba(0,0,0,.18);
+    display:none;
+    overflow:hidden;
+    z-index:999;
+}
+
+.dropdown-content a{
+    display:block;
+    color:#2d2d2d;
+    padding:12px 18px;
+    text-decoration:none;
+    transition:.2s;
+}
+
+.dropdown-content a:hover{
+    background:#edf5ee;
+    color:var(--forest);
+}
+
+.dropdown:hover .dropdown-content{
+    display:block;
+}
+
+.hero{min-height:76vh;position:relative;display:flex;align-items:end;padding:8rem 5vw;background:url("../img/banner.jpg") center/cover,linear-gradient(135deg,#12372a,#7c9b59)}
+.hero__overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,55,42,.12),rgba(18,55,42,.82))}
+.hero__content{position:relative;color:white;max-width:950px;padding-bottom:4rem}.hero__content p{max-width:700px;font-size:1.1rem}
+.eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:.75rem;font-weight:800;color:var(--clay);margin:.2rem 0 1rem}
+.section{padding:5rem 5vw}.soft{background:var(--sand)}
+.section-title{max-width:860px;margin-bottom:2rem}.section-title p{color:var(--muted)}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.4rem}.two{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.card,.species-row,.detection-card,.person{background:var(--card);border:1px solid rgba(18,55,42,.08);box-shadow:var(--shadow);border-radius:var(--radius);overflow:hidden}
+.card{padding:1.2rem}.card h3,.detection-card h3,.person h3{margin:.2rem 0;color:var(--forest)}
+.chart-wrap{height:310px}
+.ranking{display:grid;gap:.8rem}.species-row{display:grid;grid-template-columns:78px minmax(150px,260px) 1fr 70px;gap:1rem;align-items:center;padding:.8rem}
+.species-row img,.detection-card img{width:100%;aspect-ratio:1/1;object-fit:cover;background:#e7dfd0}.species-row img{border-radius:16px}
+.bar{height:14px;background:#e5dac5;border-radius:999px;overflow:hidden}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--forest-2),var(--moss));border-radius:999px}
+.detection-card img{aspect-ratio:16/11}.detection-card .body{padding:1rem}.meta{color:var(--muted);font-size:.92rem}.score{display:inline-block;background:#eaf2e7;color:var(--forest);font-weight:800;padding:.25rem .55rem;border-radius:999px}
+audio{width:100%;margin-top:.8rem}.map-frame{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);background:white}.map-frame iframe{width:100%;height:72vh;border:0}
+.about-hero{padding:7rem 5vw 4rem;background:linear-gradient(135deg,var(--forest),var(--forest-2));color:white}.about-hero div{max-width:950px}
+.people-grid,.logo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem}.person{padding:1.2rem;text-align:center}
+.avatar{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;margin:0 auto 1rem;background:linear-gradient(135deg,var(--forest-2),var(--moss));color:white;font-weight:800}
+
+.logo-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:30px;
+    margin-top:30px;
+}
+
+.logo-grid a{
+    background:#fff;
+    border-radius:18px;
+    min-height:120px;
+    padding:18px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    box-shadow:var(--shadow);
+    transition:.25s;
+}
+
+.logo-grid a:hover{
+    transform:translateY(-4px);
+}
+
+.logo-grid img{
+    max-height:70px;      /* TODOS tendrán esta altura */
+    max-width:150px;      /* ancho máximo */
+    width:auto;
+    height:auto;
+    object-fit:contain;
+}
+
+footer{padding:2rem 5vw;background:var(--forest);color:white}
+@media(max-width:720px){.species-row{grid-template-columns:64px 1fr}.species-row .bar,.species-row .count{grid-column:2}.site-header{align-items:flex-start;gap:.8rem;flex-direction:column}}
+
+.activity-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:2rem;
+}
+
+.activity-card{
+  position:relative;
+  background:white;
+  border-radius:24px;
+  padding:1.4rem;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+.activity-card select{
+  width:100%;
+  padding:.7rem .9rem;
+  border-radius:12px;
+  border:1px solid #d9e3dc;
+  margin-bottom:1rem;
+  font-weight:700;
+  color:var(--forest);
+  background:#fff;
+}
+
+.circular-chart{
+  position:relative;
+  width:100%;
+}
+
+.chart-tooltip{
+  position:absolute;
+  pointer-events:none;
+  background:#17251d;
+  color:white;
+  padding:.65rem .8rem;
+  border-radius:10px;
+  font-size:.85rem;
+  opacity:0;
+  z-index:20;
+  box-shadow:0 10px 25px rgba(0,0,0,.22);
+}
+
+.circular-title{
+  text-align:center;
+  margin-top:.5rem;
+}
+
+.circular-title h3{
+  margin:.2rem 0;
+}
+
+.circular-title p{
+  margin:0;
+  color:#6b7280;
+}

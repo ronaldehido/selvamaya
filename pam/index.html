@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sonares de la Selva Maya | Monitoreo acústico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="./">Sonares de la Selva Maya</a>
+  <nav>
+    <a href="#inicio">Inicio</a>
+    <div class="dropdown">
+        <button class="dropbtn">
+            Sitios ▾
+        </button>
+        <div class="dropdown-content">
+            <a target="_blank" href="https://ronaldehido.github.io/selvamaya/Sitios/Yaaxtuch/yaaxtuch.html">Ya'ax Tuch</a>
+            <a target="_blank" href="https://ronaldehido.github.io/selvamaya/Sitios/isidrofabela.html">Isidro Fabela</a>
+            <a target="_blank" href="https://ronaldehido.github.io/selvamaya/rewild/index.html">SPIMON</a>            
+        </div>
+    </div>
+    <a href="#mapa">Mapa</a>
+    <a href="about.html">Acerca de</a>
+</nav>
+</header>
+
+<main>
+<section id="inicio" class="hero">
+  <div class="hero__overlay"></div>
+  <div class="hero__content">
+    <p class="eyebrow">Monitoreo acústico</p>
+    <h1>Sonares de</h1>
+    <h1>la Selva Maya</h1>
+    <p>Descubre las especies que habitan en la Selva Maya.</p>
+  </div>
+</section>
+
+<section class="section" id="actividad">
+  <div class="section-title">
+    <p class="eyebrow">Actividad vocal</p>
+    <h2>Patrones de actividad diaria</h2>
+    <p>Horarios de actividad diaria de especies de interés registradas acústicamente.</p>
+  </div>
+  <div id="activityCards" class="activity-grid"></div>
+</section>
+
+
+
+<section class="section soft">
+  <div class="section-title">
+    <p class="eyebrow">Detecciones</p>
+    <h2>Top de especies detectadas</h2>
+    <p>Especies de aves y primates más registradas durante nuestros monitoreos acústicos en la Selva Maya.</p>
+  </div>
+  <div id="topSpecies" class="ranking"></div>
+</section>
+
+
+
+<section id="mapa" class="section soft">
+  <div class="section-title">
+    <p class="eyebrow">Sitios</p>
+    <h2>Estaciones de monitoreo</h2>
+  </div>
+  <div class="map-frame">
+    <iframe src="https://maps.gaica.org.co/selvamaya" title="Mapa de sitios Selva Maya" loading="lazy"></iframe>
+  </div>
+</section>
+</main>
+
+<footer>
+  <p>© Proyecto Sonares de la Selva Maya · Monitoreo acústico</p>
+</footer>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>

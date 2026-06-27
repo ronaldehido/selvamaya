@@ -1,0 +1,7 @@
+species_common,species_scientific,date,time,site_name,score,audio_url,photo_url
+Chachalaca oriental,Ortalis vetula,2025-06-12,05:42,Sitio 01 - Selva alta,0.91,assets/audio/ejemplo_01.mp3,
+Tucán pico canoa,Ramphastos sulfuratus,2025-06-12,06:18,Sitio 02 - Borde de selva,0.87,assets/audio/ejemplo_02.mp3,
+Mono araña,Ateles geoffroyi,2025-06-13,07:03,Sitio 03 - Dosel conservado,0.82,assets/audio/ejemplo_03.mp3,
+Momoto ceja turquesa,Eumomota superciliosa,2025-06-14,09:25,Sitio 01 - Selva alta,0.94,assets/audio/ejemplo_04.mp3,
+Carpintero lineado,Dryocopus lineatus,2025-06-15,10:11,Sitio 04 - Acahual,0.88,assets/audio/ejemplo_05.mp3,
+Luis bienteveo,Pitangus sulphuratus,2025-06-16,17:36,Sitio 02 - Borde de selva,0.79,assets/audio/ejemplo_06.mp3,
