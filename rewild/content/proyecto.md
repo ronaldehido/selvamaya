@@ -1,10 +1,10 @@
 ---
 title: "Sobre el proyecto"
 
-projectText: "This website is part Primate Action Fund 2025-2026 project: Surveying Geoffroy´s spider monkeys (Ateles geoffroyi) and their predators to pave the way for a biological corridor in the Yucatan Peninsula, Mexico"
+projectText: "Este sitio web es parte del proyecto Primate Action Fund 2025-2026: Surveying Geoffroy´s spider monkeys (Ateles geoffroyi) and their predators to pave the way for a biological corridor in the Yucatan Peninsula, Mexico"
 
 logoGroups:
-  - title: "Funded by"
+  - title: "Con el financiamiento de"
     logos:
       - name: "Rewild"
         image: "https://programs.wcs.org/portals/185/Rewild_Logo_Primaryat2x_1.png"

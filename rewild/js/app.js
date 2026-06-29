@@ -44,7 +44,8 @@ d3.csv(csvPath).then(data => {
 
   drawCircularChart(clean);
   drawTimeline(clean);
-  drawHeatmap(clean);
+  //drawHeatmap(clean);
+  drawSiteHeatmap(clean);
 });
 
 function getMaxDetectionsByInterval(data) {
@@ -365,7 +366,7 @@ function drawHeatmap(data) {
     .attr("text-anchor", "middle")
     .attr("font-size", 16)
     .attr("font-weight", "700")
-    .text("Probability of detections");
+    .text("Probabilidad de detecciones");
 
   svgHeatmap.append("text")
     .attr("transform", "rotate(-90)")
@@ -374,5 +375,106 @@ function drawHeatmap(data) {
     .attr("text-anchor", "middle")
     .attr("font-size", 16)
     .attr("font-weight", "700")
-    .text("Time of day");
+    .text("Hora del día");
+}
+
+function drawSiteHeatmap(data) {
+  const heatmapWidth = 760;
+  const heatmapHeight = 460;
+
+  const margin = {
+    top: 30,
+    right: 40,
+    bottom: 70,
+    left: 150
+  };
+
+  const chartWidth = heatmapWidth - margin.left - margin.right;
+  const chartHeight = heatmapHeight - margin.top - margin.bottom;
+
+  const svgSiteHeatmap = d3
+    .select("#site-heatmap-chart")
+    .append("svg")
+    .attr("viewBox", `0 0 ${heatmapWidth} ${heatmapHeight}`)
+    .attr("width", "100%");
+
+  const countsBySite = d3.rollups(
+    data,
+    v => v.length,
+    d => d.site
+  )
+    .map(([site, count]) => ({
+      site,
+      count
+    }))
+    .sort((a, b) => d3.descending(a.count, b.count));
+
+  const maxCount = d3.max(countsBySite, d => d.count) || 1;
+
+  const x = d3
+    .scaleLinear()
+    .domain([0, maxCount])
+    .nice()
+    .range([0, chartWidth]);
+
+  const y = d3
+    .scaleBand()
+    .domain(countsBySite.map(d => d.site))
+    .range([0, chartHeight])
+    .padding(0.18);
+
+  const color = d3
+    .scaleSequential()
+    .domain([0, maxCount])
+    .interpolator(d3.interpolateYlOrRd);
+
+  const g = svgSiteHeatmap
+    .append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+  g.selectAll(".site-bar")
+    .data(countsBySite)
+    .join("rect")
+    .attr("class", "site-bar")
+    .attr("x", 0)
+    .attr("y", d => y(d.site))
+    .attr("width", d => x(d.count))
+    .attr("height", y.bandwidth())
+    .attr("fill", d => color(d.count))
+    .attr("rx", 6);
+
+  g.selectAll(".site-count-label")
+    .data(countsBySite)
+    .join("text")
+    .attr("class", "site-count-label")
+    .attr("x", d => x(d.count) + 8)
+    .attr("y", d => y(d.site) + y.bandwidth() / 2)
+    .attr("dominant-baseline", "middle")
+    .attr("font-size", 12)
+    .attr("fill", "#374151")
+    .text(d => d.count);
+
+  g.append("g")
+    .call(d3.axisLeft(y));
+
+  g.append("g")
+    .attr("transform", `translate(0, ${chartHeight})`)
+    .call(d3.axisBottom(x).ticks(6));
+
+  svgSiteHeatmap.append("text")
+    .attr("x", heatmapWidth / 2)
+    .attr("y", heatmapHeight - 20)
+    .attr("text-anchor", "middle")
+    .attr("font-size", 16)
+    .attr("font-weight", "700")
+    .text("Cantidad de detecciones");
+
+  svgSiteHeatmap.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -heatmapHeight / 2)
+    .attr("y", 24)
+    .attr("text-anchor", "middle")
+    .attr("font-size", 16)
+    .attr("font-weight", "700")
+    .text("Sitios muestreados");
 }
