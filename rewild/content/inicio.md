@@ -1,5 +1,5 @@
 ---
-title: "PAM for detecting Geoffroy's spider monkey"
+title: "Monitoreo Acústico de mono araña en la Selva Maya"
 subtitle: "Visualization of acoustic detections"
 hero_image: "/img/Monoarana-animalbanknet.jpg"
 menuOrder: 1
